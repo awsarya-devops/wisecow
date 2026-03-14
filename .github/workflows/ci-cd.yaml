@@ -69,3 +69,7 @@ jobs:
         kubectl apply --validate=false -f k8s/ingress.yaml
         kubectl set image deployment/wisecow-deployment wisecow=${{ env.DOCKER_IMAGE }}:${{ github.sha }}
         kubectl rollout status deployment/wisecow-deployment --timeout=60s
+
+    - name: Apply KubeArmor Policy
+      run: |
+        kubectl apply --validate=false -f k8s/kubearmor-policy.yaml
