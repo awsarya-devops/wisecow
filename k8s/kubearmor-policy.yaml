@@ -1,0 +1,62 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: wisecow-zero-trust-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wisecow
+
+  process:
+    matchPaths:
+    - path: /usr/bin/apt
+      action: Block
+    - path: /usr/bin/apt-get
+      action: Block
+    - path: /usr/bin/wget
+      action: Block
+    - path: /usr/bin/curl
+      action: Block
+    - path: /bin/nc
+      action: Block
+    - path: /usr/bin/nc
+      action: Block
+    - path: /bin/bash
+      action: Allow
+    - path: /usr/bin/bash
+      action: Allow
+    - path: /usr/games/fortune
+      action: Allow
+    - path: /usr/games/cowsay
+      action: Allow
+    - path: /usr/bin/ncat
+      action: Allow
+
+  file:
+    matchDirectories:
+    - dir: /app/
+      recursive: true
+      action: Allow
+    - dir: /usr/games/
+      recursive: true
+      action: Allow
+    - dir: /usr/share/cowsay/
+      recursive: true
+      action: Allow
+    - dir: /usr/share/games/
+      recursive: true
+      action: Allow
+    - dir: /proc/
+      recursive: true
+      action: Block
+    - dir: /etc/
+      recursive: true
+      action: Block
+
+  network:
+    matchProtocols:
+    - protocol: tcp
+      action: Allow
+    - protocol: udp
+      action: Allow
